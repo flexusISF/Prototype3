@@ -8,25 +8,32 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float gravityModifier;
     public bool isOnGround;
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround ) {
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
+        {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            animator.SetTrigger("Jump_trig");
+        
         }
        
     }
     private void OnCollisionEnter(Collision collision)
     {
         isOnGround = true;
+        animator.SetBool("Death_b", true);
+        animator.SetInteger("DeathType_int", 1);
     }
 
 
